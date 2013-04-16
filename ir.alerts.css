@@ -1,0 +1,44 @@
+/*GEN*/
+.ir-alert {
+	display: none;
+}
+
+.ir-alert-hidden{
+	
+}
+
+/*POSITIONS*/
+.ir-alert-position-tray {
+
+}
+.ir-alert-position-topleft {
+
+}
+.ir-alert-position-topright {
+
+}
+
+/*TYPES*/
+.ir-alert-type-info {
+	
+}
+.ir-alert-type-warning {
+	
+}
+.ir-alert-type-error {
+	
+}
+
+/*CLOSE BUTTON*/
+.ir-alert-closebutton {
+
+}
+
+.ir-alert-closebutton:hover {
+	
+}
+
+/*MESSAGE CONTAINER*/
+.ir-alert-messageContainer {
+
+}
