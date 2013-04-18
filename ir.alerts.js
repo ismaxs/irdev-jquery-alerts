@@ -3,7 +3,7 @@
 	Plugin para creacion de alertas personalizables
 
 				Autor: 		Ismael Rodriguez # IRDEV
-				Version: 	v0.2 alpha # 16-04-2013
+				Version: 	v0.4 alpha # 18-04-2013
 				Licencia: 	MIT
 				Contacto: 	ismaxs@gmail.com
 				Info: 		www.irdev.com
@@ -25,6 +25,7 @@
 		hideDuration: 500,
 		autoCloseTime: null,
 		message: '',
+		showIcon: true,
 		
 		// CALLBACKS
 		onAlertShowInit: function() {},
@@ -71,7 +72,7 @@
 		 */
 		var setup = function() {
 			// Definimos el contenedor de la alerta
-			alert.container = $("<div class='ir-alert ir-alert-hidden'></div>");
+			alert.container = $("<div class='ir-alert'></div>");
 			// Comprobamos si es autoClose
 			if (alert.settings.autoCloseTime == null){
 				alert.closeButton = $("<span class='ir-alert-closebutton'>x</span>");
@@ -88,6 +89,12 @@
 			}
 			// Establecemos la posicion
 			setAlertPosition();
+			// Estructura de la alerta
+			alert.contentStruct = $("<div class='ir-alert-content'></div>");
+			alert.contentStruct.appendTo(alert.container);
+			if (alert.settings.showIcon) {
+				setAlertIcon(alert.contentStruct);
+			}
 			// Establecemos el contenedor de la alerta
 			alert.messageContainer = $("<div class='ir-alert-messageContainer'></div>)");
 			// Comprobamos si se ha establecido un mensaje
@@ -95,7 +102,37 @@
 				alert.messageContainer.html(alert.settings.message);
 			}
 			// Agregamos el contenido a la alerta
-			alert.container.append(alert.messageContainer);
+			alert.messageContainer.appendTo(alert.contentStruct);
+		}
+
+		/**
+		 * Establece el icono de la alerta
+		 */
+		var setAlertIcon = function(parent) {
+			alert.iconContainer = $("<div class='ir-alert-icon'></div>");
+			switch(alert.settings.type)
+			{
+				case 'info':
+					alert.iconContainer.addClass('ir-alert-icon-info');
+					break;
+				case 'warning':
+					alert.iconContainer.addClass('ir-alert-icon-warning');
+					break;
+				case 'error':
+					alert.iconContainer.addClass('ir-alert-icon-error');
+					break;
+				case 'success':
+					alert.iconContainer.addClass('ir-alert-icon-success');
+					break;
+			}
+			alert.iconContainer.appendTo(parent);
+		}
+
+		/**
+		 * Modifica la imagen
+		 */
+		var changeAlertIcon = function(type) {
+			alert.iconContainer.removeAttr("class").addClass('ir-alert-icon ir-alert-icon-' + type);
 		}
 
 		/**
@@ -112,6 +149,9 @@
 					break;
 				case 'error':
 					alert.container.addClass('ir-alert-type-error');
+					break;
+				case 'success':
+					alert.container.addClass('ir-alert-type-success');
 					break;
 			}
 		}
@@ -162,17 +202,39 @@
 		 *  - DOM event object
 		 */
 		var clickClose = function(e) {
+			hideAlert();
+			e.preventDefault();
+		}
+
+		/**
+		 * Muestra la alerta
+		 */
+		var showAlert = function() {
+			alert.settings.onAlertShowInit();
+			// Comprobamos el tipo de animacion
+			if (alert.settings.closeEasing === "slide") {
+				alert.container.slideDown(alert.settings.showDuration, alert.settings.onAlertShowEnd);
+			} else if (spoiler.settings.closeEasing === "fade") {
+				alert.container.fadeIn(alert.settings.showDuration, alert.settings.onAlertShowEnd);
+			} else {
+				alert.container.show(alert.settings.showDuration, alert.settings.onAlertShowEnd);
+			}
+		}
+
+		/**
+		 * Oculta la alerta
+		 */
+		var hideAlert = function() {
 			// on Init Close
 			alert.settings.onAlertHideInit();
 			// Comprobamos el tipo de animacion
 			if (alert.settings.closeEasing === "slide") {
-				elm.slideUp(alert.settings.closeDuration, alert.settings.onAlertHideEnd);
+				alert.container.slideUp(alert.settings.closeDuration, alert.settings.onAlertHideEnd);
 			} else if (spoiler.settings.closeEasing === "fade") {
-				elm.fadeOut(alert.settings.closeDuration, alert.settings.onAlertHideEnd);
+				alert.container.fadeOut(alert.settings.closeDuration, alert.settings.onAlertHideEnd);
 			} else {
-				elm.hide(alert.settings.closeDuration, alert.settings.onAlertHideEnd);
+				alert.container.hide(alert.settings.closeDuration, alert.settings.onAlertHideEnd);
 			}
-			e.preventDefault();
 		}
 
 		/**
@@ -204,6 +266,7 @@
 				alert.container.removeAttr('class').addClass('ir-alert');
 				setAlertType();
 				setAlertPosition();
+				changeAlertIcon(alertType);
 			}
 		}
 
@@ -229,7 +292,7 @@
 		 */
 		elm.hideNow = function(useSettings){
 			if (useSettings === true){
-
+				hideAlert();
 			} else {
 				alert.container.hide();
 			}	
@@ -243,7 +306,7 @@
 		 */
 		elm.showNow = function(useSettings){
 			if (useSettings === true){
-
+				showAlert();
 			} else {
 				alert.container.show();
 			}
