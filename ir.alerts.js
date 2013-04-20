@@ -3,7 +3,7 @@
 	Plugin para creacion de alertas personalizables
 
 				Autor: 		Ismael Rodriguez # IRDEV
-				Version: 	v0.4 alpha # 18-04-2013
+				Version: 	v0.9 alpha # 20-04-2013
 				Licencia: 	MIT
 				Contacto: 	ismaxs@gmail.com
 				Info: 		www.irdev.com
@@ -16,8 +16,8 @@
 	var defaults = {
 		// GENERAL
 		alertSelectorID: null,
-		type: 'info', // info, warning, error
-		position: null, // tray, top-left, top-right
+		type: 'info', // info, warning, error, success
+		position: null, // tray, topleft, topright, 
 		cssClass: null,
 		openEasing: '',
 		closeEasing: '',
@@ -46,7 +46,7 @@
 
 		// creamos un namespace que sera usado por el plugin
 		var alert = {};
-		// establecemos una referencia al elemento spoiler
+		// establecemos una referencia al elemento alerta
 		var elm = this;
 		plugin.elm = this;
 
@@ -79,9 +79,6 @@
 				alert.closeButton.appendTo(alert.container);
 				// Asignamos los eventos al boton de cierre
 				alert.closeButton.bind('click', clickClose);
-			} else {
-				// Definimos el temporizador
-				setAutoClose();
 			}
 			// Comprobamos el tipo de alert y asignamos el css
 			if (alert.settings.type != null){
@@ -132,7 +129,9 @@
 		 * Modifica la imagen
 		 */
 		var changeAlertIcon = function(type) {
-			alert.iconContainer.removeAttr("class").addClass('ir-alert-icon ir-alert-icon-' + type);
+			if (type == 'error' || type == 'warning' || type == 'success' || type == 'info') {
+				alert.iconContainer.removeAttr("class").addClass('ir-alert-icon ir-alert-icon-' + type);
+			}
 		}
 
 		/**
@@ -166,8 +165,8 @@
 				if (alert.settings.position != null){
 					switch(alert.settings.position)
 					{
-						case 'tray':
-						  	alert.container.addClass('ir-alert-position-tray');
+						case 'trayleft':
+						  	alert.container.addClass('ir-alert-position-trayleft');
 						  	break;
 						case 'topleft':
 						  	alert.container.addClass('ir-alert-position-topleft');
@@ -175,9 +174,12 @@
 						case 'topright':
 						  	alert.container.addClass('ir-alert-position-topright');
 						  	break;
-						default:
-							alert.container.addClass('ir-alert-position-topright');
+						case 'trayright':
+							alert.container.addClass('ir-alert-position-trayright');
+							break;
 					}
+					// Agregamos la alerta al body
+					alert.container.appendTo("body");
 				} else {
 					// No tiene posicion ni selector, lo añadimos a continuacion del elemento padre
 					alert.container.insertAfter(elm);
@@ -186,13 +188,6 @@
 				// Añadimos el contenedor al selector asignado
 				alert.container.appendTo("#" + alert.settings.alertSelectorID);
 			}
-		}
-
-		/**
-		 * Configura el temporizador de cierre
-		 */
-		var setAutoClose = function() {
-
 		}
 
 		/**
@@ -214,10 +209,15 @@
 			// Comprobamos el tipo de animacion
 			if (alert.settings.closeEasing === "slide") {
 				alert.container.slideDown(alert.settings.showDuration, alert.settings.onAlertShowEnd);
-			} else if (spoiler.settings.closeEasing === "fade") {
+			} else if (alert.settings.closeEasing === "fade") {
 				alert.container.fadeIn(alert.settings.showDuration, alert.settings.onAlertShowEnd);
 			} else {
 				alert.container.show(alert.settings.showDuration, alert.settings.onAlertShowEnd);
+			}
+			// Autoclose
+			if (alert.settings.autoCloseTime != null) {
+				alert.container.delay(alert.settings.autoCloseTime);
+				elm.delay(alert.settings.autoCloseTime).hideNow(true);
 			}
 		}
 
@@ -230,7 +230,7 @@
 			// Comprobamos el tipo de animacion
 			if (alert.settings.closeEasing === "slide") {
 				alert.container.slideUp(alert.settings.closeDuration, alert.settings.onAlertHideEnd);
-			} else if (spoiler.settings.closeEasing === "fade") {
+			} else if (alert.settings.closeEasing === "fade") {
 				alert.container.fadeOut(alert.settings.closeDuration, alert.settings.onAlertHideEnd);
 			} else {
 				alert.container.hide(alert.settings.closeDuration, alert.settings.onAlertHideEnd);
@@ -244,7 +244,7 @@
 		 */
 		
 		/**
-		 * Muestra el contenido del spoiler
+		 * Muestra el contenido de la alerta
 		 *
 		 * @param content (string) 
 		 *  - string
