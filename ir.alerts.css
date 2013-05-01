@@ -71,7 +71,7 @@
 
 /*POSITIONS*/
 .ir-alert-position-trayright {
-	position: absolute;
+	position: fixed;
 	bottom: 10px;
 	right: 10px;
 	z-index: 9999;
@@ -81,7 +81,7 @@
 	box-shadow: 0px 0px 12px 0px rgba(0,0,0,0.75);
 }
 .ir-alert-position-trayleft {
-	position: absolute;
+	position: fixed;
 	bottom: 10px;
 	right: 10px;
 	z-index: 9999;
@@ -91,7 +91,7 @@
 	box-shadow: 0px 0px 12px 0px rgba(0,0,0,0.75);
 }
 .ir-alert-position-topleft {
-	position: absolute;
+	position: fixed;
 	top: 10px;
 	left: 10px;
 	z-index: 9999;
@@ -101,7 +101,7 @@
 	box-shadow: 0px 0px 12px 0px rgba(0,0,0,0.75);
 }
 .ir-alert-position-topright {
-	position: absolute;
+	position: fixed;
 	top: 10px;
 	right: 10px;
 	z-index: 9999;
@@ -154,4 +154,44 @@
   	cursor: pointer;
   	opacity: 0.4;
   	filter: alpha(opacity=40);
+}
+
+
+/* EFFECTS */
+.ir-progress {
+    width: 0;
+    height: 4px;
+    background: rgba(255,255,255,0.8);
+    bottom: 5px;
+    left: 2%;
+    border-radius: 3px;
+    box-shadow: 
+        inset 0 1px 1px rgba(0,0,0,0.2), 
+        0 -1px 0 rgba(255,255,255,0.8);
+    margin: 5px;
+}
+
+@-webkit-keyframes runProgress {
+	0%{ width: 0%; background: rgba(255,255,255,0.3); }
+	100%{ width: 96%; background: rgba(255,255,255,1); }
+}
+
+@-moz-keyframes runProgress {
+	0%{ width: 0%; background: rgba(255,255,255,0.3); }
+	100%{ width: 96%; background: rgba(255,255,255,1); }
+}
+
+@-o-keyframes runProgress {
+	0%{ width: 0%; background: rgba(255,255,255,0.3); }
+	100%{ width: 96%; background: rgba(255,255,255,1); }
+}
+
+@-ms-keyframes runProgress {
+	0%{ width: 0%; background: rgba(255,255,255,0.3); }
+	100%{ width: 96%; background: rgba(255,255,255,1); }
+}
+
+@keyframes runProgress {
+	0%{ width: 0%; background: rgba(255,255,255,0.3); }
+	100%{ width: 96%; background: rgba(255,255,255,1); }
 }

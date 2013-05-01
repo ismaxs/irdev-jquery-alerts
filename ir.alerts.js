@@ -3,12 +3,13 @@
 	Plugin para creacion de alertas personalizables
 
 				Autor: 		Ismael Rodriguez # IRDEV
-				Version: 	v0.9 alpha # 20-04-2013
-				Licencia: 	MIT
+				Version: 	v0.6 alpha # 01-05-2013
+				Licencia: 	
 				Contacto: 	ismaxs@gmail.com
-				Info: 		www.irdev.com
+				Info: 		I´m developing my website
 	----------------------------------------------------------
 */
+
 (function($){
 
 	var plugin = {};
@@ -17,7 +18,7 @@
 		// GENERAL
 		alertSelectorID: null,
 		type: 'info', // info, warning, error, success
-		position: null, // tray, topleft, topright, 
+		position: null, // trayleft, trayright, topleft, topright, 
 		cssClass: null,
 		openEasing: '',
 		closeEasing: '',
@@ -79,6 +80,9 @@
 				alert.closeButton.appendTo(alert.container);
 				// Asignamos los eventos al boton de cierre
 				alert.closeButton.bind('click', clickClose);
+			} else {
+				// es autoclose, creamos el contenedor de la progress bar
+				alert.progressContainer = $("<div></div>").attr({class: 'ir-progress'});
 			}
 			// Comprobamos el tipo de alert y asignamos el css
 			if (alert.settings.type != null){
@@ -100,6 +104,30 @@
 			}
 			// Agregamos el contenido a la alerta
 			alert.messageContainer.appendTo(alert.contentStruct);
+			if (alert.settings.autoCloseTime != null) {
+				// Agregamos la progress bar
+				alert.progressContainer.insertAfter(alert.contentStruct);
+				// añadimos la clase de animacion (progress bar)
+				setupPogressBarCss();
+			}
+		}
+
+		/**
+		 * Añade la clase css que mostrará la animacion css para la barra de progreso
+		 * teniendo en cuenta el tiempo definido de autocierre 
+		 */
+		var setupPogressBarCss = function() {
+			var css = '\
+				.ir-alert.ir-alert-active .ir-progress {\
+					-webkit-animation: runProgress alert.settings.autoCloseTimems linear forwards 0.8s;\
+					-moz-animation: runProgress alert.settings.autoCloseTimems linear forwards 0.8s;\
+					-o-animation: runProgress alert.settings.autoCloseTimems linear forwards 0.8s;\
+					-ms-animation: runProgress alert.settings.autoCloseTimems linear forwards 0.8s;\
+					animation: runProgress alert.settings.autoCloseTimems linear forwards 0.8s;\
+				}\ ';
+
+			css = css.replace(/alert.settings.autoCloseTime/g, alert.settings.autoCloseTime);
+			$('head').append('<style type="text/css"> '+ css +' </style>');
 		}
 
 		/**
@@ -180,6 +208,8 @@
 					}
 					// Agregamos la alerta al body
 					alert.container.appendTo("body");
+					// Setup animation with scroll
+					setupAlertAnimationScroll();
 				} else {
 					// No tiene posicion ni selector, lo añadimos a continuacion del elemento padre
 					alert.container.insertAfter(elm);
@@ -188,6 +218,15 @@
 				// Añadimos el contenedor al selector asignado
 				alert.container.appendTo("#" + alert.settings.alertSelectorID);
 			}
+		}
+
+		/**
+		 * Anima el contenedor de la alerta acorde al movimiento del scroll
+		 */
+		var setupAlertAnimationScroll = function() {
+			$(window).scroll(function () {
+				// TODO
+			});
 		}
 
 		/**
@@ -216,6 +255,8 @@
 			}
 			// Autoclose
 			if (alert.settings.autoCloseTime != null) {
+				// css animacion
+				alert.container.addClass('ir-alert-active');
 				alert.container.delay(alert.settings.autoCloseTime);
 				elm.delay(alert.settings.autoCloseTime).hideNow(true);
 			}
