@@ -32,7 +32,7 @@ Create a `<div id="selectorID"></div>` element.
 <div id="selectorID"></div>
 ```
 
-###Step 3: Call the bxSlider
+###Step 3: Call the irAlert
 
 Call .irAlert() on `<div id="selectorID"></div>`.
 
