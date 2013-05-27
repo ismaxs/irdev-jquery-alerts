@@ -3,8 +3,8 @@
 	Plugin para creacion de alertas personalizables
 
 				Autor: 		Ismael Rodriguez # IRDEV
-				Version: 	v0.6 alpha # 01-05-2013
-				Licencia: 	
+				Version: 	v0.7 beta # 27-05-2013
+				License: 	-
 				Contacto: 	ismaxs@gmail.com
 				Info: 		I´m developing my website
 	----------------------------------------------------------
@@ -16,17 +16,17 @@
 
 	var defaults = {
 		// GENERAL
-		alertSelectorID: null,
-		type: 'info', // info, warning, error, success
-		position: null, // trayleft, trayright, topleft, topright, 
-		cssClass: null,
-		openEasing: '',
-		closeEasing: '',
-		showDuration: 500,
-		hideDuration: 500,
-		autoCloseTime: null,
-		message: '',
-		showIcon: true,
+		alertSelectorID: null,	// ID selector where alert show
+		type: 'info', 			// info, warning, error, success
+		position: null, 		// trayleft, trayright, topleft, topright, 
+		cssClass: null,			// custom css for alert container
+		openEasing: '', 		// slide, fade, _blank= '' 
+		closeEasing: '',		// slide, fade, _blank= ''
+		showDuration: 500,		// time in miliseconds 
+		hideDuration: 500,		// time in miliseconds
+		autoCloseTime: null,	// time in miliseconds, null if manual close
+		message: '',			// set message for alert
+		showIcon: true,			// boolean for show or not show
 		
 		// CALLBACKS
 		onAlertShowInit: function() {},
@@ -244,6 +244,7 @@
 		 * Muestra la alerta
 		 */
 		var showAlert = function() {
+			alert.container.stop().hide();
 			alert.settings.onAlertShowInit();
 			// Comprobamos el tipo de animacion
 			if (alert.settings.closeEasing === "slide") {
@@ -302,7 +303,7 @@
 		 *  - info, warning, error
 		 */
 		elm.setType = function(alertType){
-			if (alertType === 'info' || alertType === 'warning' || alertType === 'error') {
+			if (alertType === 'info' || alertType === 'warning' || alertType === 'error' || alertType === 'success') {
 				alert.settings.type = alertType;
 				alert.container.removeAttr('class').addClass('ir-alert');
 				setAlertType();
@@ -314,11 +315,12 @@
 		/**
 		 * Establece la posicion
 		 *
-		 * @param alertType (string) 
-		 *  - info, warning, error
+		 * @param alertPosition (string) 
+		 *  - trayleft, trayright, topleft, topright
 		 */
 		elm.setPosition = function(alertPosition){
-			if (alertPosition === 'tray' || alertPosition === 'topleft' || alertPosition === 'topright') {
+			if (alertPosition === 'trayleft' || alertPosition === 'trayright' || alertPosition === 'topleft' 
+				|| alertPosition === 'topright') {
 				alert.settings.alertSelectorID = null;
 				alert.settings.position = alertPosition;
 				setAlertPosition();
