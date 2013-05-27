@@ -13,7 +13,7 @@ Not yet
 
 ###Step 1: Link required files
 
-First and most important, the jQuery library needs to be included (no need to download - link directly from Google). Next, download the package from this site and link the bxSlider CSS file (for the theme) and the bxSlider Javascript file.
+First and most important, the jQuery library needs to be included (no need to download - link directly from Google). Next, download the package from this site and link the irAlert CSS file (for the theme) and the irAlert Javascript file.
 
 ```html
 <!-- jQuery library (served from Google) -->
