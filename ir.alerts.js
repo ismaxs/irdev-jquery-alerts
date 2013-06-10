@@ -3,7 +3,7 @@
 	Plugin para creacion de alertas personalizables
 
 				Autor: 		Ismael Rodriguez # IRDEV
-				Version: 	v0.7 beta # 27-05-2013
+				Version: 	v0.8 beta # 10-06-2013
 				License: 	-
 				Contacto: 	ismaxs@gmail.com
 				Info: 		I´m developing my website
@@ -247,9 +247,9 @@
 			alert.container.stop().hide();
 			alert.settings.onAlertShowInit();
 			// Comprobamos el tipo de animacion
-			if (alert.settings.closeEasing === "slide") {
+			if (alert.settings.openEasing === "slide") {
 				alert.container.slideDown(alert.settings.showDuration, alert.settings.onAlertShowEnd);
-			} else if (alert.settings.closeEasing === "fade") {
+			} else if (alert.settings.openEasing === "fade") {
 				alert.container.fadeIn(alert.settings.showDuration, alert.settings.onAlertShowEnd);
 			} else {
 				alert.container.show(alert.settings.showDuration, alert.settings.onAlertShowEnd);
