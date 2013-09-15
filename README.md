@@ -1,7 +1,7 @@
 irAlerts - irdev-jquery-alerts
 ==============================
 
-#irALerts 0.7 Beta
+#irAlerts 0.8 Beta
 ##The fully-loaded, responsive jQuery alerts component
 
 Written by: Ismael Rodriguez - I´m building my website!!
@@ -50,7 +50,7 @@ $(document).ready(function(){
 The alert will be inside this
 ```
 default: 'null'  
-options: 'anotherSelectorID'
+alertSelectorID: 'anotherSelectorID'
 ```
 
 **type**  

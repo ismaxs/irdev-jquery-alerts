@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>IRDev - jQuery Alerts Demo</title>
+		<link rel="stylesheet" href="ir.alerts.css">
+		<style type="text/css">
+		body {
+			background-color: #F7F7F9;
+			font-family: monospace;
+			width: 927px;
+			margin: auto;
+		}
+		textarea {
+			width: 600px;
+			height: 75px;
+		}
+
+		.btn {
+			cursor: pointer;
+			color: #539BAA;
+			font-style: normal;
+			padding: 0px 6px;
+		}
+		.btn:hover {
+			color: #83CACD;
+			font-style: normal;
+		}
+		</style>
+	</head>
+	<body>
+		<h2>IRDev - jQuery Alerts Demo</h2>
+		<div>
+			<h4>Create alert</h4>
+			<pre>
+
+			</pre>
+			<span class="btn" id="showBasic">Show Alert</span>
+			<hr>
+			<h4>Different positions</h4>
+			<pre>
+
+			</pre>
+			<span class="btn" id="positionTopLeft">TopLeft</span> | <span class="btn"  id="positionTopRight">TopRight</span> | <span class="btn"  id="positionTrayLeft">TrayLeft</span> | <span class="btn"  id="positionTrayRight">TrayRight</span> | <span class="btn"  id="positionCenterScreen">CenterScreen</span>
+			<hr>
+			<h4>Different types</h4>
+			<pre>
+
+			</pre>
+			<span class="btn" id="typeInfo">Info</span> | <span class="btn"  id="typeWarning">Warning</span> | <span class="btn"  id="typeError">Error</span> | <span class="btn"  id="typeSuccess">Success</span>
+			<hr>
+			<h4>Change content (Text or HTML)</h4>
+			<pre>
+
+			</pre>
+			<textarea id="textContent">Set new content...</textarea><span class="btn" id="changeContent">Change Content</span>
+			<hr>
+			<h4>Set auto close time in miliseconds (this remove the alert close button)</h4>
+			<pre>
+
+			</pre>
+			<input type="number" id="timeMs" placeholder="Time in ms" /><span class="btn" id="changeTime">Change close time</span>
+		</div>
+		<div id="irAlert"></div>
+		<script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>
+		<script src="ir.alerts.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				// === Create Alert
+				var irAlert = $("#irAlert").irAlert({
+					type: 'info',
+					position: 'centerScreen',
+					openEasing: 'fade',
+					closeEasing: 'fade',
+					showDuration: 1000,
+					hideDuration: 1000,
+					message: 'Default message for awesome jQuery irAlert component'
+				});
+
+				// === Button Events
+				// = Show Basic
+				$("#showBasic").click(function () {
+					irAlert.showNow(true);
+				});
+
+				// = Positions
+				// Show topleft
+				$("#positionTopLeft").click(function () {
+					irAlert.setPosition('topleft');
+					irAlert.showNow(true);
+				});
+				// Show topright
+				$("#positionTopRight").click(function () {
+					irAlert.setPosition('topright');
+					irAlert.showNow(true);
+				});
+				// Show trayleft
+				$("#positionTrayLeft").click(function () {
+					irAlert.setPosition('trayleft');
+					irAlert.showNow(true);
+				});
+				// Show trayright
+				$("#positionTrayRight").click(function () {
+					irAlert.setPosition('trayright');
+					irAlert.showNow(true);
+				});
+				// Show centerScreen
+				$("#positionCenterScreen").click(function () {
+					irAlert.setPosition('centerScreen');
+					irAlert.showNow(true);
+				});
+
+				// = Types
+				// Show Info
+				$("#typeInfo").click(function () {
+					irAlert.setType('info');
+					irAlert.showNow(true);
+				});
+				// Show Warning
+				$("#typeWarning").click(function () {
+					irAlert.setType('warning');
+					irAlert.showNow(true);
+				});
+				// Show Error
+				$("#typeError").click(function () {
+					irAlert.setType('error');
+					irAlert.showNow(true);
+				});
+				// Show Success
+				$("#typeSuccess").click(function () {
+					irAlert.setType('success');
+					irAlert.showNow(true);
+				});
+
+				// = Change Content
+				$("#changeContent").click(function(event) {
+					irAlert.setContent($("#textContent").val());
+					irAlert.showNow(true);
+				});
+
+				// = Change Time
+				$("#changeTime").click(function(event) {
+					irAlert.setAutoCloseTime($("#timeMs").val());
+					irAlert.showNow(true);
+				});
+			});
+		</script>
+	</body>
+</html>

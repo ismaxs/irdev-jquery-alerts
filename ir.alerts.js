@@ -5,7 +5,7 @@
 				Autor: 		Ismael Rodriguez # IRDEV
 				Version: 	v0.8 beta # 10-06-2013
 				License: 	-
-				Contacto: 	ismaxs@gmail.com
+				Contact: 	ismaxs@gmail.com
 				Info: 		I´m developing my website
 	----------------------------------------------------------
 */
@@ -18,7 +18,7 @@
 		// GENERAL
 		alertSelectorID: null,	// ID selector where alert show
 		type: 'info', 			// info, warning, error, success
-		position: null, 		// trayleft, trayright, topleft, topright, 
+		position: null, 		// trayleft, trayright, topleft, topright, centerScreen
 		cssClass: null,			// custom css for alert container
 		openEasing: '', 		// slide, fade, _blank= '' 
 		closeEasing: '',		// slide, fade, _blank= ''
@@ -82,7 +82,7 @@
 				alert.closeButton.bind('click', clickClose);
 			} else {
 				// es autoclose, creamos el contenedor de la progress bar
-				alert.progressContainer = $("<div></div>").attr({class: 'ir-progress'});
+				alert.progressContainer = $("<div></div>").attr({'class': 'ir-progress'});
 			}
 			// Comprobamos el tipo de alert y asignamos el css
 			if (alert.settings.type != null){
@@ -117,17 +117,19 @@
 		 * teniendo en cuenta el tiempo definido de autocierre 
 		 */
 		var setupPogressBarCss = function() {
-			var css = '\
-				.ir-alert.ir-alert-active .ir-progress {\
-					-webkit-animation: runProgress alert.settings.autoCloseTimems linear forwards 0.8s;\
-					-moz-animation: runProgress alert.settings.autoCloseTimems linear forwards 0.8s;\
-					-o-animation: runProgress alert.settings.autoCloseTimems linear forwards 0.8s;\
-					-ms-animation: runProgress alert.settings.autoCloseTimems linear forwards 0.8s;\
-					animation: runProgress alert.settings.autoCloseTimems linear forwards 0.8s;\
-				}\ ';
+			if ($(".ir-progress")) {
+				var css = '\
+					.ir-alert.ir-alert-active .ir-progress {\
+						-webkit-animation: runProgress alert.settings.autoCloseTimems linear forwards 0.8s;\
+						-moz-animation: runProgress alert.settings.autoCloseTimems linear forwards 0.8s;\
+						-o-animation: runProgress alert.settings.autoCloseTimems linear forwards 0.8s;\
+						-ms-animation: runProgress alert.settings.autoCloseTimems linear forwards 0.8s;\
+						animation: runProgress alert.settings.autoCloseTimems linear forwards 0.8s;\
+					}\ ';
 
-			css = css.replace(/alert.settings.autoCloseTime/g, alert.settings.autoCloseTime);
-			$('head').append('<style type="text/css"> '+ css +' </style>');
+				css = css.replace(/alert.settings.autoCloseTime/g, alert.settings.autoCloseTime);
+				$('head').append('<style id="runProg" type="text/css"> '+ css +' </style>');
+			}
 		}
 
 		/**
@@ -158,7 +160,8 @@
 		 */
 		var changeAlertIcon = function(type) {
 			if (type == 'error' || type == 'warning' || type == 'success' || type == 'info') {
-				alert.iconContainer.removeAttr("class").addClass('ir-alert-icon ir-alert-icon-' + type);
+				alert.iconContainer.removeAttr("class")
+					.addClass('ir-alert-icon ir-alert-icon-' + type);
 			}
 		}
 
@@ -191,6 +194,7 @@
 			if (alert.settings.alertSelectorID == null) {
 				// Comprobamos la posicion de la alerta y asignamos el css
 				if (alert.settings.position != null){
+					removeAllPositions();
 					switch(alert.settings.position)
 					{
 						case 'trayleft':
@@ -205,6 +209,9 @@
 						case 'trayright':
 							alert.container.addClass('ir-alert-position-trayright');
 							break;
+						case 'centerScreen':
+							alert.container.addClass('ir-alert-position-centerScreen');
+							break;
 					}
 					// Agregamos la alerta al body
 					alert.container.appendTo("body");
@@ -218,6 +225,15 @@
 				// Añadimos el contenedor al selector asignado
 				alert.container.appendTo("#" + alert.settings.alertSelectorID);
 			}
+		}
+
+		/**
+		 * Elimina todos los atributos CSS relacionados con la posicion de la alerta
+		 */
+		var removeAllPositions = function () {
+			alert.container.removeAttr('class');
+			alert.container.addClass('ir-alert');
+			setAlertType();
 		}
 
 		/**
@@ -320,10 +336,50 @@
 		 */
 		elm.setPosition = function(alertPosition){
 			if (alertPosition === 'trayleft' || alertPosition === 'trayright' || alertPosition === 'topleft' 
-				|| alertPosition === 'topright') {
+				|| alertPosition === 'topright' || alertPosition === 'centerScreen') {
 				alert.settings.alertSelectorID = null;
 				alert.settings.position = alertPosition;
 				setAlertPosition();
+			}
+		}
+
+		/**
+		 * Establece la posicion
+		 *
+		 * @param cssClassString (string) 
+		 *  - New css class for alert container and text
+		 */
+		elm.setCss = function (cssClassString) {
+			// body...
+		}
+
+		/**
+		 * Establece el tiempo de autocierre en milisegundos
+		 *
+		 * @param ms (integer) 
+		 *  - El tiempo minimo son 200 mss
+		 *  - Si el tiempo es 0, desactivamos el autoclose y añadimos el boton
+		 */
+		elm.setAutoCloseTime = function (ms) {
+			if (ms >= 200) {
+				if (alert.settings.autoCloseTime == null) {
+					alert.closeButton.remove();
+					alert.progressContainer = $("<div></div>").attr({'class': 'ir-progress'});
+					alert.progressContainer.insertAfter(alert.contentStruct);
+				}
+				alert.settings.autoCloseTime = ms;
+				setupPogressBarCss();
+			} else if (ms == 0) {
+				if (alert.closeButton != undefined) {
+					alert.progressContainer.remove();
+					alert.closeButton = $("<span class='ir-alert-closebutton'>x</span>");
+					alert.closeButton.appendTo(alert.container);
+					alert.closeButton.bind('click', clickClose);
+					alert.container.removeAttr('class');
+					setAlertPosition();
+					setAlertType();
+					$("#runProg").remove();
+				}
 			}
 		}
 
